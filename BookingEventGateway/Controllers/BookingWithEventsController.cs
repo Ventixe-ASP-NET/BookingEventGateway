@@ -6,27 +6,23 @@ namespace BookingEventGateway.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BookingWithEventsController : Controller
+    public class BookingWithEventsController : ControllerBase
     {
-        private readonly BookingServiceClient _bookingClient;
+        private readonly BookingBusinessLogic _logic;
 
-        public BookingWithEventsController(BookingServiceClient bookingClient)
+        public BookingWithEventsController(BookingBusinessLogic logic)
         {
-            _bookingClient = bookingClient;
+            _logic = logic;
         }
 
-
-
-
-
-
-
-        //Denna Get är bara för att testa för att hämta bokningar
+        // GET: /api/bookingwithevents
         [HttpGet]
-        public async Task<ActionResult<List<BookingModel>>> Get()
+        public async Task<ActionResult<List<BookingWithEventDto>>> Get()
         {
-            var result = await _bookingClient.GetAllAsync();
+            var result = await _logic.GetAllBookingsWithEventsAsync();
             return Ok(result);
         }
+
+      
     }
 }
