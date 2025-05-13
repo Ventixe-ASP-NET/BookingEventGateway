@@ -6,9 +6,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<BookingBusinessLogic>();
 builder.Services.AddHttpClient<BookingServiceClient>(client =>
 {
     client.BaseAddress = new Uri("https://bookingserviceventixe-fbb7amdzfsh4b4d6.swedencentral-01.azurewebsites.net/");
+});
+
+builder.Services.AddHttpClient<EventServiceClient>(client =>
+{
+    client.BaseAddress = new Uri("https://ventixe-event-rest-api-cxeqehfrcqcvdkck.swedencentral-01.azurewebsites.net/");
 });
 
 var app = builder.Build();
