@@ -1,9 +1,15 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using BookingEventGateway.Services;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient<BookingServiceClient>(client =>
+{
+    client.BaseAddress = new Uri("https://bookingserviceventixe-fbb7amdzfsh4b4d6.swedencentral-01.azurewebsites.net/");
+});
 
 var app = builder.Build();
 
