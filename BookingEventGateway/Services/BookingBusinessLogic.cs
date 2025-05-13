@@ -2,8 +2,8 @@
 
 namespace BookingEventGateway.Services
 {
-    public class EventServiceClient
+    public class BookingBusinessLogic
     {
-       
+      
     }
 }
