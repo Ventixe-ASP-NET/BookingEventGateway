@@ -7,7 +7,7 @@ namespace BookingEventGateway.ModelsDto
         // Booking-info
         public int Id { get; set; }
         public string BookingName { get; set; } = string.Empty;
-        public int InvoiceId { get; set; }
+        public string InvoiceId { get; set; }
         public DateTime CreatedAt { get; set; }
         public string EventId { get; set; } = string.Empty;
 
@@ -21,9 +21,6 @@ namespace BookingEventGateway.ModelsDto
 
         // Location (hela objektet)
         public EventLocationDto? Location { get; set; }
-
-        // Ticket types (alla typer + tillgänglighet etc.)
-        public List<EventTicketTypeDto> TicketTypes { get; set; } = new();
 
         // Extra: Bokade biljetter (per bokning)
         public List<BookedTicketDto> BookedTickets { get; set; } = new();
@@ -40,15 +37,6 @@ namespace BookingEventGateway.ModelsDto
         public string Country { get; set; } = string.Empty;
     }
 
-    public class EventTicketTypeDto
-    {
-        public Guid Id { get; set; }
-        public string TicketType { get; set; } = string.Empty;
-        public decimal Price { get; set; }
-        public int TotalTickets { get; set; }
-        public int TicketsSold { get; set; }
-        public int TicketsLeft { get; set; }
-    }
 
     public class BookedTicketDto //Ej färdig, bara en skiss
     {

@@ -18,6 +18,7 @@ namespace BookingEventGateway.Services
             try
             {
                 var response = await _http.GetFromJsonAsync<EventDto>($"api/Event/{id}");
+                Console.WriteLine($"Fetched Event {id}, Category: {response?.Category?.CategoryName}");
                 return response;
             }
             catch (Exception ex)
