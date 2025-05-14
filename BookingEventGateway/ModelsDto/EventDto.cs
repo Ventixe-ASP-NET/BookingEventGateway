@@ -7,7 +7,7 @@ namespace BookingEventGateway.ModelsDto
         public string Id { get; set; } = string.Empty;
         public string EventName { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string? Category { get; set; }
+        public CategoryDto? Category { get; set; }
         public int Status { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
@@ -34,5 +34,11 @@ namespace BookingEventGateway.ModelsDto
         public int TotalTickets { get; set; }
         public int TicketsSold { get; set; }
         public int TicketsLeft { get; set; }
+    }
+
+    public class CategoryDto
+    {
+        public int Id { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
     }
 }

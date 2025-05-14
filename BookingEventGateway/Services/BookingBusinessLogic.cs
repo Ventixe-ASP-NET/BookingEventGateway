@@ -40,7 +40,7 @@ namespace BookingEventGateway.Services
                     // Event info
                     EventName = eventDto.EventName,
                     Description = eventDto.Description,
-                    Category = eventDto.Category,
+                    Category = eventDto.Category?.CategoryName,
                     StartDate = eventDto.StartDate,
                     EndDate = eventDto.EndDate,
 
@@ -53,18 +53,13 @@ namespace BookingEventGateway.Services
                         Country = eventDto.Location.Country
                     },
 
-                    TicketTypes = eventDto.TicketTypes.Select(t => new EventTicketTypeDto
+                    BookedTickets = booking.Tickets.Select(t => new BookedTicketDto
                     {
-                        Id = t.Id,
-                        TicketType = t.TicketType_,
-                        Price = t.Price,
-                        TotalTickets = t.TotalTickets,
-                        TicketsSold = t.TicketsSold,
-                        TicketsLeft = t.TicketsLeft
-                    }).ToList(),
-
-                    // Bokade biljetter hämtas senare när BookingService har stöd för det
-                    BookedTickets = new() // lämnas tom så länge
+                        TicketTypeId = t.TicketTypeId,
+                        TicketType = t.TicketType,
+                        Quantity = t.Quantity,
+                        PricePerTicket = t.PricePerTicket
+                    }).ToList()
                 };
 
                 result.Add(dto);
