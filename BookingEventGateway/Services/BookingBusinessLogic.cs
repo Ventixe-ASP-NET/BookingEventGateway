@@ -68,35 +68,34 @@ namespace BookingEventGateway.Services
             return result;
         }
 
-        public async Task<CategoryStatsDto> GetTopCategoriesAsync()
+        public async Task<CategoryStatsDto> GetTopCategoriesAsync(string range)
         {
-            // Hämta redan sammanslagen lista med bookings + eventdata
-            var bookingsWithEvent = await GetAllBookingsWithEventsAsync();
+            var all = await GetAllBookingsWithEventsAsync();
 
-            // Groupa bokningar efter kategori (obs! kan vara null, så vi skyddar)
-            var grouped = bookingsWithEvent
-                .Where(b => !string.IsNullOrEmpty(b.Category))
-                .GroupBy(b => b.Category)
-                .Select(g => new CategoryStat
+            var now = DateTime.UtcNow;
+            IEnumerable<BookingWithEventDto> filtered = range.ToLower() switch
+            {
+                "today" => all.Where(b => b.CreatedAt.Date == now.Date),
+                "week" => all.Where(b => b.CreatedAt >= now.AddDays(-7)),
+                "month" => all.Where(b => b.CreatedAt >= now.AddMonths(-1)),
+                _ => all
+            };
+
+            var grouped = filtered
+                .GroupBy(b => b.Category ?? "Uncategorized")
+                .Select(g => new CategoryItemDto
                 {
-                    Name = g.Key!,
-                    Count = g.Count(),
-                    Percentage = 0 // sätts senare
+                    Name = g.Key,
+                    Count = g.Count()
                 })
-                .OrderByDescending(x => x.Count)
+                .OrderByDescending(c => c.Count)
                 .Take(4)
                 .ToList();
 
-            // Räkna totalbokningar
-            int total = bookingsWithEvent.Count;
+            var total = grouped.Sum(c => c.Count);
+            foreach (var c in grouped)
+                c.Percentage = total > 0 ? Math.Round((double)c.Count / total * 100, 1) : 0;
 
-            // Lägg till procent
-            foreach (var cat in grouped)
-            {
-                cat.Percentage = Math.Round((double)cat.Count / total * 100, 1);
-            }
-
-            // Returnera DTO
             return new CategoryStatsDto
             {
                 TotalBookings = total,

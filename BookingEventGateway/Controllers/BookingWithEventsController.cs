@@ -24,9 +24,9 @@ namespace BookingEventGateway.Controllers
         }
 
         [HttpGet("stats/top-categories")]
-        public async Task<ActionResult<CategoryStatsDto>> GetTopCategories()
+        public async Task<ActionResult<CategoryStatsDto>> GetTopCategories([FromQuery] string range = "week")
         {
-            var stats = await _logic.GetTopCategoriesAsync();
+            var stats = await _logic.GetTopCategoriesAsync(range);
             return Ok(stats);
         }
 
