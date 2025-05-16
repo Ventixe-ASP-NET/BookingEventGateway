@@ -23,6 +23,13 @@ namespace BookingEventGateway.Controllers
             return Ok(result);
         }
 
-      
+        [HttpGet("stats/top-categories")]
+        public async Task<ActionResult<CategoryStatsDto>> GetTopCategories()
+        {
+            var stats = await _logic.GetTopCategoriesAsync();
+            return Ok(stats);
+        }
+
+
     }
 }

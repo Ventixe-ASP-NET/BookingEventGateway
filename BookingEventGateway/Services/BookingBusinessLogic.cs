@@ -67,5 +67,41 @@ namespace BookingEventGateway.Services
 
             return result;
         }
+
+        public async Task<CategoryStatsDto> GetTopCategoriesAsync()
+        {
+            // Hämta redan sammanslagen lista med bookings + eventdata
+            var bookingsWithEvent = await GetAllBookingsWithEventsAsync();
+
+            // Groupa bokningar efter kategori (obs! kan vara null, så vi skyddar)
+            var grouped = bookingsWithEvent
+                .Where(b => !string.IsNullOrEmpty(b.Category))
+                .GroupBy(b => b.Category)
+                .Select(g => new CategoryStat
+                {
+                    Name = g.Key!,
+                    Count = g.Count(),
+                    Percentage = 0 // sätts senare
+                })
+                .OrderByDescending(x => x.Count)
+                .Take(4)
+                .ToList();
+
+            // Räkna totalbokningar
+            int total = bookingsWithEvent.Count;
+
+            // Lägg till procent
+            foreach (var cat in grouped)
+            {
+                cat.Percentage = Math.Round((double)cat.Count / total * 100, 1);
+            }
+
+            // Returnera DTO
+            return new CategoryStatsDto
+            {
+                TotalBookings = total,
+                Categories = grouped
+            };
+        }
     }
 }
