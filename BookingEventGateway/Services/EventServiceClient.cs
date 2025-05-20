@@ -17,21 +17,5 @@ namespace BookingEventGateway.Services
             var wrapper = await _http.GetFromJsonAsync<EventListWrapper>("api/event");
             return wrapper?.Events ?? new List<EventDto>();
         }
-
-
-        public async Task<EventDto?> GetEventByIdAsync(string id)
-        {
-            try
-            {
-                var response = await _http.GetFromJsonAsync<EventDto>($"api/Event/{id}");
-                Console.WriteLine($"Fetched Event {id}, Category: {response?.Category?.CategoryName}");
-                return response;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"EventServiceClient error for ID {id}: {ex.Message}");
-                return null;
-            }
-        }
     }
 }

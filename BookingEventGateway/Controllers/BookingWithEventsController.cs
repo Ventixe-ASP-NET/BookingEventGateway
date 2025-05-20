@@ -15,14 +15,6 @@ namespace BookingEventGateway.Controllers
             _logic = logic;
         }
 
-        // GET: /api/bookingwithevents
-        [HttpGet]
-        public async Task<ActionResult<List<BookingWithEventDto>>> Get()
-        {
-            var result = await _logic.GetAllBookingsWithEventsAsync();
-            return Ok(result);
-        }
-
         [HttpGet("stats/top-categories")]
         public async Task<ActionResult<CategoryStatsDto>> GetTopCategories([FromQuery] string range = "week")
         {
