@@ -41,4 +41,9 @@ namespace BookingEventGateway.ModelsDto
         public int Id { get; set; }
         public string CategoryName { get; set; } = string.Empty;
     }
+
+    public class EventListWrapper
+    {
+        public List<EventDto> Events { get; set; } = new();
+    }
 }

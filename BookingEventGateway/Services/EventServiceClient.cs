@@ -12,6 +12,12 @@ namespace BookingEventGateway.Services
         {
             _http = http;
         }
+        public async Task<List<EventDto>> GetAllAsync()
+        {
+            var wrapper = await _http.GetFromJsonAsync<EventListWrapper>("api/event");
+            return wrapper?.Events ?? new List<EventDto>();
+        }
+
 
         public async Task<EventDto?> GetEventByIdAsync(string id)
         {
