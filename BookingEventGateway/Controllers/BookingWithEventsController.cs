@@ -30,6 +30,17 @@ namespace BookingEventGateway.Controllers
             return Ok(stats);
         }
 
+        // GET /api/bookingwithevents/paged?sort=...&order=...&page=...&pageSize=...
+        [HttpGet("paged")]
+        public async Task<ActionResult<PagedResponse<BookingWithEventDto>>> GetPaged(
+            [FromQuery] string sort = "date",
+            [FromQuery] string order = "desc",
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 8)
+        {
+            var paged = await _logic.GetPagedBookingsWithEventsAsync(sort, order, page, pageSize);
+            return Ok(paged);
+        }
 
     }
 }
