@@ -16,5 +16,10 @@ namespace BookingEventGateway.Services
         {
             return await _http.GetFromJsonAsync<List<BookingModel>>("api/bookings") ?? new();
         }
+
+        public async Task<BookingModel?> GetByEvoucherCodeAsync(string code)
+        {
+            return await _http.GetFromJsonAsync<BookingModel>($"api/bookings/by-evoucher?code={code}");
+        }
     }
 }

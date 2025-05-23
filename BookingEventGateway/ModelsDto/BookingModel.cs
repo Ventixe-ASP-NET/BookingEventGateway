@@ -10,5 +10,6 @@ namespace BookingEventGateway.ModelsDto
         public DateTime CreatedAt { get; set; }
         public string EventId { get; set; } = string.Empty;
         public List<BookingTicketDto> Tickets { get; set; } = new();
+        public string EvoucherId { get; set; }
     }
 }
