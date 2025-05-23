@@ -34,5 +34,14 @@ namespace BookingEventGateway.Controllers
             return Ok(paged);
         }
 
+        [HttpGet("evoucher/{code}")]
+        public async Task<ActionResult<BookingWithEventDto>> GetByEvoucherCode(string code)
+        {
+            var result = await _logic.GetByEvoucherCodeAsync(code);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace BookingEventGateway.Services
                 return new BookingWithEventDto
                 {
                     Id = booking.Id,
+                    EvoucherId = booking.EvoucherId,
                     BookingName = booking.BookingName,
                     InvoiceId = booking.InvoiceId,
                     CreatedAt = booking.CreatedAt,
@@ -132,8 +133,8 @@ namespace BookingEventGateway.Services
                 ("status", "asc") => all.OrderBy(b => "Confirmed"),
                 ("status", "desc") => all.OrderByDescending(b => "Confirmed"),
 
-                ("evoucher", "asc") => all.OrderBy(b => "–"),
-                ("evoucher", "desc") => all.OrderByDescending(b => "–"),
+                ("evoucher", "asc") => all.OrderBy(b => b.EvoucherId),
+                ("evoucher", "desc") => all.OrderByDescending(b => b.EvoucherId),
 
                 _ => all.OrderByDescending(b => b.CreatedAt)
             };
@@ -148,6 +149,47 @@ namespace BookingEventGateway.Services
             {
                 Items = items,
                 TotalCount = total
+            };
+        }
+
+        public async Task<BookingWithEventDto?> GetByEvoucherCodeAsync(string code)
+        {
+            var booking = await _bookingClient.GetByEvoucherCodeAsync(code);
+            if (booking == null) return null;
+
+            var ev = await _eventClient.GetByIdAsync(booking.EventId);
+
+            return new BookingWithEventDto
+            {
+                Id = booking.Id,
+                BookingName = booking.BookingName,
+                InvoiceId = booking.InvoiceId,
+                CreatedAt = booking.CreatedAt,
+                EventId = booking.EventId,
+
+                EventName = ev?.EventName,
+                Description = ev?.Description,
+                Category = ev?.Category?.CategoryName,
+                StartDate = ev?.StartDate,
+                EndDate = ev?.EndDate,
+                Location = ev != null
+                    ? new EventLocationDto
+                    {
+                        VenueName = ev.Location.VenueName,
+                        StreetAddress = ev.Location.StreetAddress,
+                        City = ev.Location.City,
+                        PostalCode = ev.Location.PostalCode,
+                        Country = ev.Location.Country
+                    }
+                    : null,
+
+                BookedTickets = booking.Tickets.Select(t => new BookedTicketDto
+                {
+                    TicketTypeId = t.TicketTypeId,
+                    TicketType = t.TicketType,
+                    Quantity = t.Quantity,
+                    PricePerTicket = t.PricePerTicket
+                }).ToList()
             };
         }
     }

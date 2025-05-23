@@ -6,6 +6,7 @@ namespace BookingEventGateway.ModelsDto
     {
         // Booking-info
         public int Id { get; set; }
+        public string EvoucherId { get; set; }
         public string BookingName { get; set; } = string.Empty;
         public string InvoiceId { get; set; }
         public DateTime CreatedAt { get; set; }
